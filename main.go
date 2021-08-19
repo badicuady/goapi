@@ -8,10 +8,10 @@ import (
 )
 
 func main() {
-	start()
+	Start()
 }
 
-func start(params ...int) {
+func Start(params ...int) {
 	fmt.Println("Starting...")
 
 	port := 3000
