@@ -2,12 +2,27 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
 	"goapi.com/api/controllers"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
+type Product struct {
+	gorm.Model
+	Code  string
+	Price uint
+}
+
 func main() {
+	dsn := "root:GwVE7uc2eYT73FNG@tcp(127.0.0.1:3307)/goapi?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		fmt.Println(err)
+	}
+	db.AutoMigrate(&Product{})
+
 	Start()
 }
 
@@ -20,7 +35,5 @@ func Start(params ...int) {
 	}
 
 	controllers.RegisterControllers()
-	fmt.Printf("Server started on port: %v!\r\n", port)
-
-	http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
+	controllers.Start(port)
 }
